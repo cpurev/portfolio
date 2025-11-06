@@ -1,32 +1,37 @@
 <template>
-  <div v-if="isOpen" class="modal-mask" >
+  <div v-if="isOpen" class="modal-mask">
     <div class="modal-wrapper" ref="target">
-      <font-awesome-icon icon = 'fa-solid fa-x fa-10x' @click="handleClick" class="close-icon"/>
       <div class="modal-container">
+        <!-- Close icon inside child -->
+        <font-awesome-icon 
+          icon="fa-solid fa-x" 
+          @click="handleClick" 
+          class="close-icon"
+        />
         <slot></slot>
       </div>
     </div>
   </div>
 </template>
-  
+
 <script setup>
-  import { onMounted, ref } from 'vue'
-  import { onClickOutside } from '@vueuse/core'
+import { ref } from 'vue'
+import { onClickOutside } from '@vueuse/core'
 
-  const props = defineProps({
-    isOpen: Boolean,
-  });
+const props = defineProps({
+  isOpen: Boolean,
+});
 
-  const handleClick = () => { emit('modal-close') }
-  const emit = defineEmits(["modal-close"]);
+const emit = defineEmits(["modal-close"]);
+const handleClick = () => emit('modal-close');
 
-  const target = ref(null)
-  onClickOutside(target, ()=>emit('modal-close'))
+const target = ref(null)
+onClickOutside(target, () => emit('modal-close'))
 </script>
-  
+
 <style scoped>
 .modal-mask{
-  position: absolute; 
+  position: fixed; 
   top: 0;
   left: 0;
   width: 100%;
@@ -37,28 +42,35 @@
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.5);
 }
+
 .modal-wrapper {
+  position: relative;
   width: 666px;
   border: 1px solid #000;
   border-radius: 17px;
-  padding: 7px;
   background-color: white;
   z-index: 999;
-  display: flex;
-  flex-direction: row-reverse;
 }
-.close-icon{
+
+.modal-container {
+  position: relative; /* Needed for absolute positioning of close icon */
+}
+
+.close-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
   cursor: pointer;
   color: black;
-  float: left;
-  padding: 7px 13px;
+  font-size: 1.2rem;
+  z-index: 10;
 }
+
 @media only screen and (max-width: 940px) {
-  .modal-wrapper{
+  .modal-wrapper {
     max-height: 400px;
     max-width: 300px;
-    overflow: scroll;
+    overflow-y: auto;
   }
 }
 </style>
-  
