@@ -46,9 +46,9 @@ onClickOutside(target, () => emit('modal-close'))
 .modal-wrapper {
   position: relative;
   width: 666px;
-  border: 1px solid #000;
+  border: 1px solid var(--privy-border);
   border-radius: 17px;
-  background-color: white;
+  background-color: var(--privy-bg);
   z-index: 999;
 }
 
@@ -61,7 +61,7 @@ onClickOutside(target, () => emit('modal-close'))
   top: 10px;
   right: 10px;
   cursor: pointer;
-  color: black;
+  color: var(--privy-fg);
   font-size: 1.2rem;
   z-index: 10;
 }

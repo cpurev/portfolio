@@ -22,36 +22,32 @@
 </template>
 
 <style scoped>
-/* Retro 90s Windows Explorer style */
+/* Privy theme */
 .retro-profile {
-  background: #c0c0c0; /* classic gray window background */
-  border: 2px solid #fff; /* beveled border effect */
-  border-top-color: #fff;
-  border-left-color: #fff;
-  border-bottom-color: #808080;
-  border-right-color: #808080;
+  background: var(--privy-bg);
+  border: 2px solid var(--privy-border);
   padding: 25px;
-  font-family: 'Courier New', Courier, monospace; /* pixel-style font */
+  font-family: var(--privy-font-family);
   max-width: 800px;
-
-  box-shadow: 4px 4px #808080; /* classic 90s drop shadow */
+  border-radius: var(--privy-radius);
 }
 
 .folder-header {
   display: flex;
   align-items: center;
-  background: linear-gradient(to bottom, #0000ff, #000099);
-  color: white;
+  background: var(--privy-accent);
+  color: var(--privy-fg);
   padding: 10px;
-  border: 2px inset #fff;
+  border: 2px solid var(--privy-border);
   margin-bottom: 15px;
+  border-radius: var(--privy-radius);
 }
 
 .folder-icon {
   width: 40px;
   height: 30px;
-  background: #ffff00; /* yellow folder icon */
-  border: 2px solid #808080;
+  background: var(--privy-muted);
+  border: 2px solid var(--privy-border);
   margin-right: 10px;
 }
 
@@ -68,24 +64,25 @@
 }
 
 .folder-content {
-  background: #e0e0e0;
+  background: var(--privy-bg);
   padding: 15px;
-  border: 2px inset #fff;
+  border: 2px solid var(--privy-border);
+  border-radius: var(--privy-radius);
 }
 
 .folder-content p {
   margin: 15px 0;
   line-height: 1.4;
-  color: #000;
+  color: var(--privy-fg);
 }
 
 .folder-content a {
-  color: #0000ff;
+  color: var(--privy-muted);
   text-decoration: underline;
 }
 
 .folder-content a:hover {
-  color: #ff0000;
+  color: var(--privy-fg);
 }
 
 /* Mobile-friendly adjustments */

@@ -27,11 +27,11 @@ const altText = ref('click me')
   padding: 1rem 3rem;
   background: transparent;
   font-size: 1rem;
-  border: 1px solid var(--cyan);
-  border-radius: 3px;
-  color: white;
+  border: 1px solid var(--privy-border);
+  border-radius: var(--privy-radius);
+  color: var(--privy-fg);
 
-  background: linear-gradient(to left, transparent 50%, var(--blue-dim) 50%) right;
+  background: linear-gradient(to left, transparent 50%, var(--privy-accent) 50%) right;
   background-size: 200%;
   transition: .3s ease-out;
 }
