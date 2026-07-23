@@ -1,8 +1,8 @@
 <script setup>
 defineProps({
   items: { type: Array, default: () => [] },
-  label: { type: String, default: 'Technologies' },
-})
+  label: { type: String, default: "Technologies" },
+});
 </script>
 
 <template>
@@ -15,26 +15,27 @@ defineProps({
 .tag-row {
   display: flex;
   flex-wrap: wrap;
-  row-gap: 0.35rem;
+  row-gap: 0.25rem;
+}
+
+.tag-row::before {
+  content: "# " / "";
+  color: var(--ink-dim);
+  white-space: pre;
 }
 
 .tag-row__item {
   display: inline-flex;
   align-items: center;
-  font-size: var(--fs-label);
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  color: var(--ink-3);
+  font-size: var(--fs-xs);
+  text-transform: lowercase;
+  color: var(--ink-dim);
   white-space: nowrap;
 }
 
 .tag-row__item:not(:last-child)::after {
-  content: "";
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: currentColor;
-  opacity: 0.45;
-  margin: 0 0.7rem;
+  content: "\00b7";
+  margin: 0 0.6rem;
+  opacity: 0.6;
 }
 </style>

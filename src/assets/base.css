@@ -1,23 +1,22 @@
 /* =========================================================================
-   Design system — Minimalist Monochrome Editorial (Swiss)
-   Single family: IBM Plex Mono. Monochrome, high contrast, hairline rules.
-   Loaded via Google Fonts in index.html (weights 300–700).
+   Design system — Claude Code Terminal Session (v4)
+   Single family: IBM Plex Mono. Dark-only warm terminal palette,
+   Claude coral accent. Loaded via Google Fonts in index.html.
    ========================================================================= */
 
 :root {
-  color-scheme: light dark;
+  color-scheme: dark;
 
   /* Type family */
   --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", "Menlo", "Consolas", monospace;
 
   /* Type scale (mono reads wide — modest sizes, hierarchy via weight + space) */
-  --fs-label: 0.6875rem;                       /* 11px — uppercase meta/tags */
+  --fs-label: 0.6875rem;                       /* 11px — uppercase meta */
   --fs-xs: 0.75rem;                            /* 12px */
-  --fs-sm: 0.8125rem;                          /* 13px — descriptions */
-  --fs-base: 0.9375rem;                        /* 15px — body */
+  --fs-sm: 0.875rem;                           /* 14px — secondary/meta only */
+  --fs-base: 1rem;                             /* 16px — body */
   --fs-lg: 1.0625rem;                          /* 17px — item titles */
-  --fs-xl: clamp(1.35rem, 3.4vw, 1.75rem);     /* section titles */
-  --fs-hero: clamp(1.6rem, 5vw, 2.5rem);       /* lead statement */
+  --fs-h1: clamp(1.4rem, 4.5vw, 2rem);         /* transcript h1 stays modest */
 
   --lh-tight: 1.15;
   --lh-snug: 1.35;
@@ -29,7 +28,7 @@
   /* Layout */
   --container: 880px;
   --pad-x: clamp(1.25rem, 5vw, 2rem);
-  --section-gap: clamp(3.5rem, 9vw, 6.5rem);
+  --section-gap: clamp(2.75rem, 7vw, 4.5rem);
 
   /* Motion */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -38,33 +37,35 @@
   --dur: 220ms;
   --dur-slow: 420ms;
 
-  /* Color — light (cool paper, deep-blue accent) */
-  --bg: #f6f8fb;
-  --bg-raise: #eef2f8;
-  --ink: #0f1b2d;
-  --ink-2: #46566b;
-  --ink-3: #6b7a90;
-  --line: #dde3ec;
-  --line-strong: #0f1b2d;
-  --accent: #1d4e89;
-  --accent-strong: #16406f;
-  --on-accent: #ffffff;
-  --hover: rgba(29, 78, 137, 0.055);
+  /* Color — black/gray terminal, Claude coral accent.
+     Contrast vs --bg: ink 15.2:1 · dim 6.7:1 · accent 5.9:1 · ok 8.6:1 */
+  --bg: #121212;
+  --bg-raise: #1b1b1b;
+  --ink: #e8e8e8;
+  --ink-dim: #9a9a9a;
+  --line: #333333;
+  --accent: #d97757;
+  --accent-strong: #e08a6d;
+  --ok: #7fbf7f;
+  --err: #ef6b6b;
+  --on-accent: #121212;
+  --hover: rgba(255, 255, 255, 0.06);
+  --desktop: #0a0a0a;
 }
 
-@media (prefers-color-scheme: dark) {
+/* Compact desktop terminal type + height-aware scaling so short laptops
+   still fit a full tab without scrolling. */
+@media (min-width: 1100px) {
   :root {
-    --bg: #0b1220;
-    --bg-raise: #121b2e;
-    --ink: #e7edf6;
-    --ink-2: #9fb0c9;
-    --ink-3: #74849f;
-    --line: #1c2740;
-    --line-strong: #e7edf6;
-    --accent: #6ea3ef;
-    --accent-strong: #93bcf8;
-    --on-accent: #0b1220;
-    --hover: rgba(110, 163, 239, 0.09);
+    --fs-sm: 0.8125rem;
+    --fs-base: 0.875rem;
+    --fs-lg: 0.9375rem;
+    --fs-h1: clamp(1.25rem, 1.6vw, 1.6rem);
+    --lh-body: 1.55;
+  }
+
+  html {
+    font-size: clamp(13px, 1.78vh, 16px);
   }
 }
 
@@ -77,19 +78,29 @@
   padding: 0;
 }
 
+/* The page never scrolls — content lives inside the terminal window,
+   whose active tab panel scrolls internally if it must. */
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+#app {
+  height: 100%;
+}
+
 html {
   -webkit-text-size-adjust: 100%;
-  overflow-x: hidden;
 }
 
 body {
-  min-height: 100vh;
   font-family: var(--font-mono);
   font-size: var(--fs-base);
   font-weight: 400;
   line-height: var(--lh-body);
   color: var(--ink);
-  background-color: var(--bg);
+  background-color: var(--desktop);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -135,7 +146,7 @@ ul {
   font-size: var(--fs-label);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
-  color: var(--ink-3);
+  color: var(--ink-dim);
 }
 
 .hairline {
@@ -143,6 +154,43 @@ ul {
   width: 100%;
   height: 1px;
   background: var(--line);
+}
+
+.dim {
+  color: var(--ink-dim);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Terminal caret — steady block by default, blinks when motion is allowed */
+.cursor {
+  display: inline-block;
+  width: 0.6em;
+  height: 1.15em;
+  margin-left: 0.15em;
+  background: var(--accent);
+  vertical-align: text-bottom;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cursor {
+    animation: cursor-blink 1.1s steps(2, start) infinite;
+  }
+  @keyframes cursor-blink {
+    to {
+      visibility: hidden;
+    }
+  }
 }
 
 .skip-link {
