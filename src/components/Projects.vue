@@ -1,5 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue'
+import SectionHeading from './SectionHeading.vue'
+import TagRow from './TagRow.vue'
 
 const items = [
   {img: "", name:'Phase One Club', description:'A landing page for a athleasure brand Phase One Club', languages:['TypeScript', 'React'],link:'https://www.phaseoneclub.se/'},
@@ -10,101 +12,221 @@ const items = [
   {img: "oww_proj.png", name:'Our Winter World', description:'A WordPress plugin for snow educational activities', languages:['React', 'WordPress', 'PHP'], link:'http://ourwinterworld.org/'}
 ]
 
+const VISIBLE = 3
 const expanded = ref(false)
-const canExpand = computed(() => items.length > 3)
+const canExpand = computed(() => items.length > VISIBLE)
+const primaryItems = computed(() => items.slice(0, VISIBLE))
+const overflowItems = computed(() => items.slice(VISIBLE))
 
-const handleClick = (link) => { 
-  if(link == "@") return; 
-  window.open(link, "_blank"); 
-}
+const isLink = (item) => item.link && item.link !== '@'
+const numberOf = (index) => String(index + 1).padStart(2, '0')
 </script>
 
 <template>
-  <div style="max-width: 888px; margin: 0 auto; padding: 2rem 1.5rem;">
+  <section class="projects container" aria-label="Projects">
+    <SectionHeading title="Projects" index="02" :count="String(items.length).padStart(2, '0')" />
 
-    <div style="text-align: center; margin-bottom: 2rem;">
-      <h2 style="font-size: var(--f-xxl); line-height: 1.4; margin: 0.75rem auto; max-width: 700px;">Projects</h2>
-      <div style="width: 163px; height: 1px; background: var(--privy-fg); margin: 0.75rem auto;"></div>
-    </div>
-
-    <div class="projects-list" :class="{ collapsed: canExpand && !expanded }">
-      <div
-        v-for="(item, index) in items"
+    <div class="project-list">
+      <component
+        :is="isLink(item) ? 'a' : 'div'"
+        v-for="(item, index) in primaryItems"
         :key="item.name"
-        @click="handleClick(item.link)"
-        :style="{ cursor: item.link !== '@' ? 'pointer' : 'default' }"
-        class="project-row"
-        style="display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 1.25rem 0; border-bottom: 1px solid var(--privy-border);"
+        class="project"
+        :class="{ 'project--wip': !isLink(item) }"
+        :href="isLink(item) ? item.link : null"
+        :target="isLink(item) ? '_blank' : null"
+        :rel="isLink(item) ? 'noreferrer' : null"
       >
-        <div style="flex: 1; min-width: 0;">
-          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem;">
-            <span style="font-size: var(--f-small); color: var(--privy-muted);">{{ String(index + 1).padStart(2, '0') }}</span>
-            <h3 style="font-weight: 600; font-size: var(--f-large); line-height: 1.4; margin: 0;">
-              {{ item.name }}
-              <font-awesome-icon v-if="item.link !== '@'" icon="fa-solid fa-arrow-up-right-from-square" size="xs" style="color: var(--privy-muted); margin-left: 0.25rem;" />
-              <span v-else style="font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--privy-muted); margin-left: 0.35rem;">WIP</span>
-            </h3>
-          </div>
-          <p style="font-size: var(--f-small); line-height: 1.75; color: var(--privy-muted); margin: 0;">{{ item.description }}</p>
-          <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem;">
-            <span
-              v-for="lang in item.languages"
-              :key="lang"
-              style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--privy-muted); border: 1px solid var(--privy-border); padding: 2px 8px;"
-            >{{ lang }}</span>
-          </div>
+        <span class="project__index" aria-hidden="true">{{ numberOf(index) }}</span>
+        <div class="project__body">
+          <h3 class="project__title">
+            <span class="project__name">{{ item.name }}</span>
+            <font-awesome-icon
+              v-if="isLink(item)"
+              icon="fa-solid fa-arrow-up-right-from-square"
+              class="project__arrow"
+            />
+            <span v-else class="project__wip mono-label">WIP</span>
+          </h3>
+          <p class="project__desc">{{ item.description }}</p>
+          <TagRow :items="item.languages" />
+        </div>
+      </component>
+
+      <!-- Overflow rows: animate to auto height -->
+      <div v-if="canExpand" class="more" :class="{ 'is-open': expanded }">
+        <div id="projects-more" class="more__inner" :inert="expanded ? null : true">
+          <component
+            :is="isLink(item) ? 'a' : 'div'"
+            v-for="(item, index) in overflowItems"
+            :key="item.name"
+            class="project"
+            :class="{ 'project--wip': !isLink(item) }"
+            :href="isLink(item) ? item.link : null"
+            :target="isLink(item) ? '_blank' : null"
+            :rel="isLink(item) ? 'noreferrer' : null"
+          >
+            <span class="project__index" aria-hidden="true">{{ numberOf(index + VISIBLE) }}</span>
+            <div class="project__body">
+              <h3 class="project__title">
+                <span class="project__name">{{ item.name }}</span>
+                <font-awesome-icon
+                  v-if="isLink(item)"
+                  icon="fa-solid fa-arrow-up-right-from-square"
+                  class="project__arrow"
+                />
+                <span v-else class="project__wip mono-label">WIP</span>
+              </h3>
+              <p class="project__desc">{{ item.description }}</p>
+              <TagRow :items="item.languages" />
+            </div>
+          </component>
         </div>
       </div>
     </div>
 
-    <div v-if="canExpand" @click="expanded = !expanded" class="chevron-toggle" :class="{ 'chevron-toggle--expanded': expanded }">
-      <font-awesome-icon icon="fa-solid fa-chevron-down" class="chevron-icon" :class="{ rotated: expanded }" />
+    <div v-if="canExpand" class="toggle-wrap">
+      <button
+        type="button"
+        class="toggle"
+        :aria-expanded="expanded"
+        aria-controls="projects-more"
+        @click="expanded = !expanded"
+      >
+        <span class="mono-label">{{ expanded ? 'Show less' : 'Show all' }}</span>
+        <font-awesome-icon icon="fa-solid fa-chevron-down" class="toggle__icon" :class="{ 'is-up': expanded }" />
+      </button>
     </div>
-
-  </div>
+  </section>
 </template>
 
 <style scoped>
-.projects-list {
+.projects {
+  margin-top: var(--section-gap);
+}
+
+.project {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  gap: 0 0.5rem;
+  padding: 1.5rem 0.75rem 1.5rem 1rem;
+  border-bottom: 1px solid var(--line);
+  border-left: 2px solid transparent;
+  color: inherit;
+  transition: background-color var(--dur) var(--ease), border-left-color var(--dur) var(--ease);
+}
+a.project {
+  cursor: pointer;
+}
+a.project:hover,
+a.project:focus-visible {
+  background-color: var(--hover);
+  border-left-color: var(--accent);
+}
+
+.project__index {
+  font-size: var(--fs-sm);
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  padding-top: 0.15rem;
+}
+
+.project__body {
+  min-width: 0;
+}
+
+.project__title {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: var(--fs-lg);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.project__name {
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition: background-size var(--dur) var(--ease);
+}
+a.project:hover .project__name,
+a.project:focus-visible .project__name {
+  background-size: 100% 1px;
+}
+
+.project__arrow {
+  font-size: 0.7em;
+  color: var(--ink-3);
+  transition: transform var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+a.project:hover .project__arrow,
+a.project:focus-visible .project__arrow {
+  color: var(--accent);
+  transform: translate(2px, -2px);
+}
+
+.project__wip {
+  color: var(--ink-3);
+  border: 1px solid var(--line);
+  padding: 0.1rem 0.4rem;
+}
+
+.project__desc {
+  font-size: var(--fs-sm);
+  line-height: var(--lh-body);
+  color: var(--ink-2);
+  margin-bottom: 0.75rem;
+  max-width: 60ch;
+}
+
+/* animate-to-auto-height overflow */
+.more {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--dur-slow) var(--ease);
+}
+.more.is-open {
+  grid-template-rows: 1fr;
+}
+.more__inner {
   overflow: hidden;
-  transition: max-height 0.4s cubic-bezier(0.645, 0.045, 0.355, 1);
+  min-height: 0;
 }
 
-.projects-list.collapsed {
-  max-height: 27rem;
-}
-
-
-.chevron-toggle {
+.toggle-wrap {
   display: flex;
   justify-content: center;
-  align-items: flex-end;
-  cursor: pointer;
-  margin-top: -3rem;
-  padding-bottom: 0.5rem;
-  height: 4rem;
-  background: linear-gradient(to bottom, transparent 0%, var(--privy-bg) 70%);
+  margin-top: 1.5rem;
 }
-
-.chevron-toggle--expanded {
-  margin-top: 0;
-  height: auto;
-  padding: 1rem 0;
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.25rem;
   background: none;
-  border-top: 1px solid var(--privy-border);
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--ink-3);
+  transition: color var(--dur) var(--ease);
 }
-
-.chevron-icon {
-  color: var(--privy-muted);
-  font-size: 14px;
-  transition: transform 0.3s ease, color 0.2s ease;
+.toggle:hover {
+  color: var(--accent);
 }
-
-.chevron-icon.rotated {
+.toggle__icon {
+  font-size: 0.7rem;
+  transition: transform var(--dur) var(--ease);
+}
+.toggle__icon.is-up {
   transform: rotate(180deg);
 }
 
-.chevron-toggle:hover .chevron-icon {
-  color: var(--privy-fg);
+@media (prefers-reduced-motion: reduce) {
+  .more {
+    transition: none;
+  }
 }
 </style>

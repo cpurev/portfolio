@@ -1,52 +1,187 @@
-@font-face {
-  font-family: "IBM Plex Mono";
-  font-style: normal;
-  font-weight: 100;
-  src: url(/IBMPlexMono-Thin.ttf) format("truetype");
-}
+/* =========================================================================
+   Design system — Minimalist Monochrome Editorial (Swiss)
+   Single family: IBM Plex Mono. Monochrome, high contrast, hairline rules.
+   Loaded via Google Fonts in index.html (weights 300–700).
+   ========================================================================= */
 
-/* color palette - privy theme */
 :root {
-  --privy-font-family: "IBM Plex Mono", monospace;
-  --privy-accent: #111;
-  --privy-bg: #ffffff;
-  --privy-fg: #0a0a0a;
-  --privy-muted: #a3a3a3;
-  --privy-border: #1f1f1f;
-  --privy-radius: 9999px;
+  color-scheme: light dark;
 
-  --font-mono: var(--privy-font-family);
-  --font-sans: var(--privy-font-family);
+  /* Type family */
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", "Menlo", "Consolas", monospace;
 
-  --background-color-primary: var(--privy-bg);
-  --background-color-ligther: var(--privy-border);
-  --accent-color: var(--privy-accent);
-  --text-primary-color: var(--privy-fg);
-  --color-background: var(--privy-bg);
-  --color-text: var(--privy-fg);
+  /* Type scale (mono reads wide — modest sizes, hierarchy via weight + space) */
+  --fs-label: 0.6875rem;                       /* 11px — uppercase meta/tags */
+  --fs-xs: 0.75rem;                            /* 12px */
+  --fs-sm: 0.8125rem;                          /* 13px — descriptions */
+  --fs-base: 0.9375rem;                        /* 15px — body */
+  --fs-lg: 1.0625rem;                          /* 17px — item titles */
+  --fs-xl: clamp(1.35rem, 3.4vw, 1.75rem);     /* section titles */
+  --fs-hero: clamp(1.6rem, 5vw, 2.5rem);       /* lead statement */
 
-  --transition: all 0.25s cubic-bezier(0.645,0.045,0.355,1);
+  --lh-tight: 1.15;
+  --lh-snug: 1.35;
+  --lh-body: 1.7;
 
-  --f-small: 14px;
-  --f-medium: 15px;
-  --f-large: 20px;
-  --f-xxl: 22px;
+  --tracking-wide: 0.14em;
+  --tracking-label: 0.18em;
+
+  /* Layout */
+  --container: 880px;
+  --pad-x: clamp(1.25rem, 5vw, 2rem);
+  --section-gap: clamp(3.5rem, 9vw, 6.5rem);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 150ms;
+  --dur: 220ms;
+  --dur-slow: 420ms;
+
+  /* Color — light (cool paper, deep-blue accent) */
+  --bg: #f6f8fb;
+  --bg-raise: #eef2f8;
+  --ink: #0f1b2d;
+  --ink-2: #46566b;
+  --ink-3: #6b7a90;
+  --line: #dde3ec;
+  --line-strong: #0f1b2d;
+  --accent: #1d4e89;
+  --accent-strong: #16406f;
+  --on-accent: #ffffff;
+  --hover: rgba(29, 78, 137, 0.055);
 }
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0b1220;
+    --bg-raise: #121b2e;
+    --ink: #e7edf6;
+    --ink-2: #9fb0c9;
+    --ink-3: #74849f;
+    --line: #1c2740;
+    --line-strong: #e7edf6;
+    --accent: #6ea3ef;
+    --accent-strong: #93bcf8;
+    --on-accent: #0b1220;
+    --hover: rgba(110, 163, 239, 0.09);
+  }
+}
+
+/* ------------------------------------------------------------------ reset */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
   margin: 0;
-  position: relative;
-  font-weight: normal;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
 }
 
 body {
-  max-width: 100vw;
-  max-height: 100vh;
-  font-family: var(--privy-font-family);
-  background-color: var(--privy-bg);
-  color: var(--privy-fg);
+  min-height: 100vh;
+  font-family: var(--font-mono);
+  font-size: var(--fs-base);
+  font-weight: 400;
+  line-height: var(--lh-body);
+  color: var(--ink);
+  background-color: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
+h1,
+h2,
+h3 {
+  font-weight: 500;
+  line-height: var(--lh-tight);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--dur) var(--ease);
+}
+
+ul {
+  list-style: none;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+/* --------------------------------------------------------------- utilities */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--pad-x);
+}
+
+.mono-label {
+  font-size: var(--fs-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.hairline {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: var(--line);
+}
+
+.skip-link {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, -120%);
+  z-index: 100;
+  padding: 0.55rem 1rem;
+  font-size: var(--fs-label);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--on-accent);
+  background: var(--accent);
+  transition: transform var(--dur) var(--ease);
+}
+.skip-link:focus {
+  transform: translate(-50%, 0.75rem);
+}
+
+/* ------------------------------------------------------- entrance reveal */
+.reveal {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    opacity: 0;
+    animation: reveal-rise var(--dur-slow) var(--ease-out) both;
+    animation-delay: var(--reveal-delay, 0ms);
+  }
+  @keyframes reveal-rise {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

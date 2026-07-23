@@ -17,6 +17,7 @@
     "@vercel/analytics": "^1.4.1",
     "@vueuse/core": "^10.9.0",
     "pinia": "^2.1.7",
+    "ui-ux-pro-max-cli": "^2.11.0",
     "vue": "^3.2.41",
     "vue-router": "^4.4.5"
   },
