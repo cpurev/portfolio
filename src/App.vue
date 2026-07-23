@@ -617,7 +617,7 @@ onBeforeUnmount(() => {
 
 @media (max-width: 640px) {
   .tab {
-    padding: 0.5rem 0.4rem;
+    padding: 0.8rem 0.4rem;
     font-size: var(--fs-label);
     letter-spacing: 0;
   }
