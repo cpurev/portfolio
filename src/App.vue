@@ -192,7 +192,7 @@ onBeforeUnmount(() => {
                     >
                       Open ~/projects
                     </button>
-                    &mdash; 6 shipped projects
+                    &mdash; 8 shipped projects
                   </li>
                   <li>Press shift+tab to cycle tabs</li>
                 </ul>

@@ -6,6 +6,18 @@ import TagRow from "./TagRow.vue";
 
 const items = [
   {
+    name: "go-ocr",
+    description: "Receipt images to structured JSON via Tesseract OCR",
+    languages: ["Go", "Tesseract", "MongoDB", "WhatsApp API"],
+    link: "https://github.com/cpurev/go-ocr",
+  },
+  {
+    name: "go-drive-mcp",
+    description: "MCP server giving agents scoped access to Google Drive",
+    languages: ["Go", "MCP", "OAuth2", "Drive API"],
+    badge: "private repo",
+  },
+  {
     name: "Phase One Club",
     description: "Landing page for the athleisure brand Phase One Club",
     languages: ["TypeScript", "React"],
@@ -29,7 +41,8 @@ const items = [
     description:
       "This site — a portfolio styled as a Claude Code terminal session, built with Vue 3",
     languages: ["Vue3", "Vite"],
-    link: "@",
+    badge: "you are here",
+    badgeTone: "ok",
   },
   {
     name: "Fletnix",
@@ -45,7 +58,7 @@ const items = [
   },
 ];
 
-const isLink = (item) => item.link && item.link !== "@";
+const isLink = (item) => Boolean(item.link);
 const numberOf = (index) => String(index + 1).padStart(2, "0");
 </script>
 
@@ -76,7 +89,12 @@ const numberOf = (index) => String(index + 1).padStart(2, "0");
             <h3 class="project__title">
               <span class="project__name">{{ item.name }}</span>
               <IconExternal v-if="isLink(item)" class="project__arrow" />
-              <span v-else class="project__badge mono-label">you are here</span>
+              <span
+                v-else-if="item.badge"
+                class="project__badge mono-label"
+                :class="{ 'project__badge--ok': item.badgeTone === 'ok' }"
+                >{{ item.badge }}</span
+              >
             </h3>
             <p class="project__desc dim">{{ item.description }}</p>
             <TagRow :items="item.languages" />
@@ -151,9 +169,12 @@ a.project:focus-visible .project__arrow {
 }
 
 .project__badge {
-  color: var(--ok);
+  color: var(--ink-dim);
   border: 1px solid var(--line);
   padding: 0.1rem 0.4rem;
+}
+.project__badge--ok {
+  color: var(--ok);
 }
 
 .project__desc {
@@ -163,16 +184,32 @@ a.project:focus-visible .project__arrow {
   max-width: 60ch;
 }
 
-/* Full-width tab panel on desktop: tighter rows so all six fit one screen */
+/* Full-width tab panel on desktop: two columns, the way `ls` really prints,
+   with tighter rows so all eight fit one screen without scrolling. */
 @media (min-width: 1100px) {
+  .project-list {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 1.5rem;
+  }
+  /* Divider down the gutter, so the two columns read as one listing */
+  .project-list::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    border-left: 1px solid var(--line);
+  }
   .project {
-    padding: 0.75rem 0.75rem 0.75rem 1rem;
+    padding: 0.7rem 0.75rem 0.7rem 1rem;
   }
   .project__title {
     margin-bottom: 0.2rem;
   }
   .project__desc {
-    margin-bottom: 0.45rem;
+    margin-bottom: 0.4rem;
   }
 }
 </style>
