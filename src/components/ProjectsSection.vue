@@ -18,6 +18,13 @@ const items = [
     badge: "private repo",
   },
   {
+    name: "celebsimil",
+    description:
+      "Celebrity lookalike finder that runs face matching entirely in the browser",
+    languages: ["Go", "WebAssembly", "ONNX", "Python"],
+    badge: "private repo",
+  },
+  {
     name: "Phase One Club",
     description: "Landing page for the athleisure brand Phase One Club",
     languages: ["TypeScript", "React"],
