@@ -15,8 +15,10 @@ const links = [
 <template>
   <footer class="footer">
     <span>&copy; {{ year }} Chuluunbat Purev</span>
-    <template v-for="link in links" :key="link.label">
-      <span class="dot" aria-hidden="true">&middot;</span>
+    <template v-for="(link, i) in links" :key="link.label">
+      <span class="dot" :class="{ lead: i === 0 }" aria-hidden="true"
+        >&middot;</span
+      >
       <a :href="link.href" target="_blank" rel="noreferrer" class="link">
         {{ link.label }}
         <IconExternal />
@@ -30,7 +32,7 @@ const links = [
   position: fixed;
   left: 0;
   right: 0;
-  bottom: max(1rem, env(safe-area-inset-bottom));
+  bottom: calc(1rem + env(safe-area-inset-bottom));
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -54,11 +56,33 @@ const links = [
   transition: text-decoration-color var(--dur-fast) var(--ease);
 }
 
-.link:hover {
-  text-decoration-color: currentColor;
+@media (hover: hover) {
+  .link:hover {
+    text-decoration-color: currentColor;
+  }
 }
 
 .dot {
   opacity: 0.5;
+}
+
+/* Narrow phones: copyright on its own line, links below */
+@media (max-width: 400px) {
+  .footer > span:first-child {
+    flex-basis: 100%;
+    text-align: center;
+  }
+
+  .lead {
+    display: none;
+  }
+}
+
+/* Taller hit area on touch screens without moving the text */
+@media (pointer: coarse) {
+  .link {
+    padding-block: 0.6rem;
+    margin-block: -0.6rem;
+  }
 }
 </style>

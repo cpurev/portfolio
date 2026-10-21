@@ -1,5 +1,5 @@
 <script setup>
-import { computed, nextTick, ref } from "vue";
+import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
 
 /* Centred "Ask about me" chat. Replies come from /api/chat, which has
    Gemini pick prewritten answers (api/_responses.js); the key never
@@ -18,6 +18,30 @@ const input = ref(null);
 const log = ref(null);
 
 const canSend = computed(() => draft.value.trim().length > 0 && !busy.value);
+
+/* iOS doesn't shrink fixed elements for the on-screen keyboard, so pin the
+   chat to the visual viewport: it then stays above the keyboard and the log
+   gives up height instead of the input sliding underneath. */
+const viewport = ref(null);
+const keyboard = ref(false);
+
+const fitViewport = () => {
+  const vv = window.visualViewport;
+  viewport.value = { top: `${vv.offsetTop}px`, height: `${vv.height}px` };
+  keyboard.value = window.innerHeight - vv.height > 120;
+};
+
+onMounted(() => {
+  if (!window.visualViewport) return;
+  fitViewport();
+  window.visualViewport.addEventListener("resize", fitViewport);
+  window.visualViewport.addEventListener("scroll", fitViewport);
+});
+
+onBeforeUnmount(() => {
+  window.visualViewport?.removeEventListener("resize", fitViewport);
+  window.visualViewport?.removeEventListener("scroll", fitViewport);
+});
 
 /* Split plain text into text and URL pieces, so links are clickable
    without ever rendering the model's output as HTML. */
@@ -82,7 +106,7 @@ const onKeydown = (event) => {
 </script>
 
 <template>
-  <main class="chat">
+  <main class="chat" :class="{ keyboard }" :style="viewport">
     <Transition name="fade">
       <h2 v-if="!messages.length" class="title">Ask about me</h2>
     </Transition>
@@ -166,14 +190,28 @@ const onKeydown = (event) => {
 
   color-scheme: light;
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  justify-content: safe center; /* on short screens, clip the bottom, not the title */
   gap: 1.25rem;
-  padding: 1.5rem 1rem;
+  /* Bottom padding keeps clear of the fixed footer and the home indicator. */
+  padding: max(1.5rem, env(safe-area-inset-top))
+    max(1rem, env(safe-area-inset-right))
+    calc(3.5rem + env(safe-area-inset-bottom))
+    max(1rem, env(safe-area-inset-left));
   pointer-events: none; /* let the sea behind react to the cursor */
+}
+
+/* The footer sits behind the keyboard, so reclaim its space. */
+.chat.keyboard {
+  padding-bottom: 0.75rem;
 }
 
 .chat > * {
@@ -193,7 +231,11 @@ const onKeydown = (event) => {
 .log {
   width: min(680px, 100%);
   max-height: 40vh;
+  max-height: 40dvh;
+  min-height: 0;
+  flex: 0 1 auto; /* shrinks first when the keyboard takes the space */
   overflow-y: auto;
+  overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
@@ -295,6 +337,7 @@ const onKeydown = (event) => {
 }
 
 .card {
+  flex: none;
   width: min(680px, 100%);
   background: var(--c-card);
   border: 1px solid var(--c-line);
@@ -357,8 +400,10 @@ const onKeydown = (event) => {
     opacity var(--dur-fast) var(--ease);
 }
 
-.send:hover:not(:disabled) {
-  transform: translateY(-1px);
+@media (hover: hover) {
+  .send:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
 }
 
 .send:disabled {
@@ -389,13 +434,59 @@ const onKeydown = (event) => {
     border-color var(--dur-fast) var(--ease);
 }
 
-.chip:hover {
-  background: #fff;
-  border-color: rgba(18, 18, 18, 0.22);
+@media (hover: hover) {
+  .chip:hover {
+    background: #fff;
+    border-color: rgba(18, 18, 18, 0.22);
+  }
 }
 
 @media (max-width: 520px) {
   .hint {
+    display: none;
+  }
+
+  .title {
+    font-size: 1.6rem;
+  }
+
+  .bubble {
+    max-width: 90%;
+  }
+}
+
+/* The footer wraps to two lines here (see SiteFooter.vue) */
+@media (max-width: 400px) {
+  .chat {
+    padding-bottom: calc(4.75rem + env(safe-area-inset-bottom));
+  }
+}
+
+/* Finger-sized targets on touch screens */
+@media (pointer: coarse) {
+  .hint {
+    display: none; /* keyboard shortcuts don't apply to on-screen keyboards */
+  }
+
+  .send {
+    width: 44px;
+    height: 44px;
+  }
+
+  .chip {
+    min-height: 40px;
+    padding-inline: 1rem;
+  }
+}
+
+/* Phones in landscape: little height, so drop the extras */
+@media (max-height: 480px) {
+  .chat {
+    gap: 0.75rem;
+  }
+
+  .title,
+  .chips {
     display: none;
   }
 }

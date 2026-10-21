@@ -47,8 +47,8 @@ onBeforeUnmount(() => {
   position: fixed;
   inset: 0;
   display: block;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background: #ffffff;
   font-family: var(--font-mono);
 }
