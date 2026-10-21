@@ -3,6 +3,7 @@ import { fileURLToPath, URL } from "node:url";
 
 import { defineConfig, loadEnv } from "vite";
 import vue from "@vitejs/plugin-vue";
+import seo, { siteUrlFrom } from "./vite-plugin-seo.js";
 
 /* In dev, serve /api/chat with the same handler Vercel runs in production,
    reading GEMINI_API_KEY from .env.local. */
@@ -38,11 +39,14 @@ const chatApi = (env) => ({
 });
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
-  plugins: [vue(), chatApi(loadEnv(mode, process.cwd(), ""))],
-  resolve: {
-    alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url)),
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), "");
+  return {
+    plugins: [vue(), chatApi(env), seo(siteUrlFrom(env))],
+    resolve: {
+      alias: {
+        "@": fileURLToPath(new URL("./src", import.meta.url)),
+      },
     },
-  },
-}));
+  };
+});

@@ -84,7 +84,7 @@ const onKeydown = (event) => {
 <template>
   <main class="chat">
     <Transition name="fade">
-      <h1 v-if="!messages.length" class="title">Ask about me</h1>
+      <h2 v-if="!messages.length" class="title">Ask about me</h2>
     </Transition>
 
     <div
