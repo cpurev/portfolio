@@ -7,6 +7,7 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
 
 const suggestions = [
   "What do you work on?",
+  "What is cstack?",
   "What's your stack?",
   "Show me your projects",
 ];
