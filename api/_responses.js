@@ -14,6 +14,10 @@ const REACH_OUT = `Happy to go into that, but it's easier in a real conversation
 
 const PROJECTS = {
   "go-ocr": `go-ocr turns receipt photos into structured data using OCR. It's written in Go: ${GITHUB}/go-ocr`,
+  "go-drive-mcp":
+    "go-drive-mcp is an MCP server, written in Go, that gives AI agents scoped access to Google Drive through OAuth2. The repo is private.",
+  celebsimil:
+    "celebsimil is a celebrity lookalike finder that runs the face matching entirely in the browser, using Go compiled to WebAssembly and an ONNX model. The repo is private.",
   "phase-one-club":
     "Phase One Club is a landing page I built for an athleisure brand, in TypeScript and React: https://www.phaseoneclub.se/",
   masn: "For Machine Advanced Solutions Network (MASN) I built the company's website in TypeScript and Vue 3: https://www.masn.mn/",
@@ -107,7 +111,7 @@ export const TOOLS = [
     description:
       "Overview or list of his projects, side projects, things he built.",
     reply:
-      "A few things I've built:\n- cstack: lightweight Claude Code skills that fix the model's angle, not its intelligence\n- go-ocr: receipt photos to structured data\n- UA Scholars: scholarship submissions for the University of Alaska\n- Phase One Club and MASN: company websites\n- Fletnix and Our Winter World\n- This site\nAsk about any of them for more.",
+      "A few things I've built:\n- cstack: lightweight Claude Code skills that fix the model's angle, not its intelligence\n- go-ocr: receipt photos to structured data\n- go-drive-mcp: an MCP server giving agents scoped access to Google Drive\n- celebsimil: a celebrity lookalike finder that runs in the browser\n- UA Scholars: scholarship submissions for the University of Alaska\n- Phase One Club and MASN: company websites\n- Fletnix and Our Winter World\n- This site\nAsk about any of them for more.",
   },
   {
     name: "cstack",

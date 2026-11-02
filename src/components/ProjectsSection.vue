@@ -6,6 +6,13 @@ import TagRow from "./TagRow.vue";
 
 const items = [
   {
+    name: "cstack",
+    description:
+      "Claude Code plugin: seven lightweight skills that fix the model's angle, not its intelligence",
+    languages: ["Claude Code", "Python", "Node", "Lightpanda"],
+    link: "https://github.com/cpurev/cstack",
+  },
+  {
     name: "go-ocr",
     description: "Receipt images to structured JSON via Tesseract OCR",
     languages: ["Go", "Tesseract", "MongoDB", "WhatsApp API"],
@@ -192,7 +199,7 @@ a.project:focus-visible .project__arrow {
 }
 
 /* Full-width tab panel on desktop: two columns, the way `ls` really prints,
-   with tighter rows so all eight fit one screen without scrolling. */
+   with tighter rows so the whole list fits one screen without scrolling. */
 @media (min-width: 1100px) {
   .project-list {
     position: relative;
