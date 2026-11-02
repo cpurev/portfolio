@@ -21,6 +21,13 @@ const log = ref(null);
 
 const canSend = computed(() => draft.value.trim().length > 0 && !busy.value);
 
+/* Suggestions stay on screen until asked, so there's always a next question. */
+const remaining = computed(() =>
+  suggestions.filter(
+    (s) => !messages.value.some((m) => m.role === "user" && m.content === s)
+  )
+);
+
 /* iOS doesn't shrink fixed elements for the on-screen keyboard, so pin the
    chat to the visual viewport: it then stays above the keyboard and the log
    gives up height instead of the input sliding underneath. */
@@ -175,9 +182,11 @@ const onKeydown = (event) => {
       </div>
     </form>
 
-    <ul v-if="!messages.length" class="chips">
-      <li v-for="s in suggestions" :key="s">
-        <button type="button" class="chip" @click="send(s)">{{ s }}</button>
+    <ul v-if="remaining.length" class="chips">
+      <li v-for="s in remaining" :key="s">
+        <button type="button" class="chip" :disabled="busy" @click="send(s)">
+          {{ s }}
+        </button>
       </li>
     </ul>
   </main>
@@ -188,7 +197,7 @@ const onKeydown = (event) => {
   --c-ink: #121212;
   --c-dim: #6b6b6b;
   --c-line: rgba(18, 18, 18, 0.1);
-  --c-card: rgba(255, 255, 255, 0.78);
+  --c-card: rgba(255, 255, 255, 0.94);
 
   color-scheme: light;
   position: fixed;
@@ -221,12 +230,12 @@ const onKeydown = (event) => {
 }
 
 .title {
-  font-size: clamp(1.75rem, 5vw, 2.75rem);
+  font-size: clamp(1.25rem, 3.5vw, 1.75rem);
   font-weight: 400;
   letter-spacing: -0.02em;
   color: var(--c-ink);
-  width: min(680px, 100%); /* aligns with the card's left edge */
-  padding-left: 0.25rem;
+  text-align: center;
+  margin-bottom: 1rem;
   pointer-events: none;
 }
 
@@ -265,7 +274,6 @@ const onKeydown = (event) => {
 .bubble {
   max-width: 85%;
   padding: 0.65rem 0.95rem;
-  border-radius: 18px;
   font-size: 0.9rem;
   line-height: 1.5;
   white-space: pre-wrap;
@@ -276,7 +284,6 @@ const onKeydown = (event) => {
   align-self: flex-end;
   background: var(--c-ink);
   color: #fff;
-  border-bottom-right-radius: 6px;
 }
 
 .bubble.assistant {
@@ -284,9 +291,6 @@ const onKeydown = (event) => {
   background: var(--c-card);
   color: var(--c-ink);
   border: 1px solid var(--c-line);
-  border-bottom-left-radius: 6px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
 }
 
 .bubble a {
@@ -307,7 +311,6 @@ const onKeydown = (event) => {
 .typing i {
   width: 6px;
   height: 6px;
-  border-radius: 50%;
   background: var(--c-dim);
   animation: blink 1.2s infinite ease-in-out;
 }
@@ -343,18 +346,12 @@ const onKeydown = (event) => {
   width: min(680px, 100%);
   background: var(--c-card);
   border: 1px solid var(--c-line);
-  border-radius: 24px;
   padding: 0.9rem 0.9rem 0.7rem 1.1rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 12px 40px rgba(0, 0, 0, 0.08);
-  backdrop-filter: blur(14px) saturate(1.2);
-  -webkit-backdrop-filter: blur(14px) saturate(1.2);
-  transition: border-color var(--dur) var(--ease),
-    box-shadow var(--dur) var(--ease);
+  transition: border-color var(--dur) var(--ease);
 }
 
 .card:focus-within {
   border-color: rgba(18, 18, 18, 0.22);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 16px 48px rgba(0, 0, 0, 0.12);
 }
 
 .input {
@@ -394,7 +391,6 @@ const onKeydown = (event) => {
   width: 36px;
   height: 36px;
   border: 0;
-  border-radius: 50%;
   background: var(--c-ink);
   color: #fff;
   cursor: pointer;
@@ -421,23 +417,25 @@ const onKeydown = (event) => {
   width: min(680px, 100%);
 }
 
+.chip:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
 .chip {
   font: inherit;
   font-size: var(--fs-xs);
   color: var(--c-ink);
   background: var(--c-card);
   border: 1px solid var(--c-line);
-  border-radius: 999px;
   padding: 0.45rem 0.85rem;
   cursor: pointer;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
   transition: background var(--dur-fast) var(--ease),
     border-color var(--dur-fast) var(--ease);
 }
 
 @media (hover: hover) {
-  .chip:hover {
+  .chip:hover:not(:disabled) {
     background: #fff;
     border-color: rgba(18, 18, 18, 0.22);
   }
@@ -449,7 +447,7 @@ const onKeydown = (event) => {
   }
 
   .title {
-    font-size: 1.6rem;
+    font-size: 1.25rem;
   }
 
   .bubble {
@@ -475,7 +473,12 @@ const onKeydown = (event) => {
     height: 44px;
   }
 
-  .chip {
+  .chip:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.chip {
     min-height: 40px;
     padding-inline: 1rem;
   }
