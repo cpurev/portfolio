@@ -10,6 +10,7 @@ const suggestions = [
   "What is cstack?",
   "What's your stack?",
   "Show me your projects",
+  "Are you a real chat?",
 ];
 
 const draft = ref("");
