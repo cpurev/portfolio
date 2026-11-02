@@ -1,4 +1,5 @@
 /* eslint-env node */
+import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath, URL } from "node:url";
 
 import { defineConfig, loadEnv } from "vite";
@@ -6,7 +7,14 @@ import vue from "@vitejs/plugin-vue";
 import seo, { siteUrlFrom } from "./vite-plugin-seo.js";
 
 /* In dev, serve /api/chat with the same handler Vercel runs in production,
-   reading GEMINI_API_KEY from .env.local. */
+   reading GEMINI_API_KEY from .env.local. The system prompt is private notes
+   kept out of git: in production it is the CHAT_SYSTEM_PROMPT env var, in dev
+   it is read from portfolio-chat-system-prompt.md when present. */
+const PROMPT_FILE = "portfolio-chat-system-prompt.md";
+const systemPromptFrom = (env) =>
+  env.CHAT_SYSTEM_PROMPT ||
+  (existsSync(PROMPT_FILE) ? readFileSync(PROMPT_FILE, "utf8") : undefined);
+
 const chatApi = (env) => ({
   name: "chat-api",
   configureServer(server) {
@@ -21,7 +29,8 @@ const chatApi = (env) => ({
             headers: { "content-type": req.headers["content-type"] ?? "" },
             body: req.method === "POST" ? Buffer.concat(chunks) : undefined,
           }),
-          env.GEMINI_API_KEY
+          env.GEMINI_API_KEY,
+          systemPromptFrom(env)
         );
         res.statusCode = response.status;
         response.headers.forEach((value, key) => res.setHeader(key, value));

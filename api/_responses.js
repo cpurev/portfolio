@@ -59,8 +59,8 @@ export const TOOLS = [
   {
     name: "is_ai",
     description:
-      "The visitor asks if they are talking to the real Chuluunbat, a bot or an AI, or how this chat works.",
-    reply: `No, I'm an AI assistant that gives a general overview of Chuluunbat's work. To talk to him directly, email ${EMAIL} or message him on LinkedIn: ${LINKEDIN}`,
+      "The visitor asks if they are talking to the real Chuluunbat, a bot or an AI, whether this is a real chat, how this chat works, or whether the answers are canned or generated.",
+    reply: `Not a real chat, and not a free-talking bot either. When you send a message, a small Gemini model reads it and picks the most fitting reply from a set of answers Chuluunbat wrote himself. It never writes its own text. That keeps the answers accurate, costs nothing to run, and means nobody can talk it into saying something he didn't. The trade-off: vague follow-ups can get a repeat. To talk to the real Chuluunbat, email ${EMAIL} or message him on LinkedIn: ${LINKEDIN}`,
   },
   {
     name: "current_work",
