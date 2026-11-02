@@ -164,11 +164,24 @@ export class Sea {
     j.vx *= drag;
     j.vy *= drag;
 
-    // Steering: a wandering preferred heading, mostly upward…
-    let target = (noise(t * WANDER, j.seed) - 0.5) * 2.6;
-    // …away from the side walls…
-    if (j.x < j.r * 2) target += 0.8;
-    else if (j.x > width - j.r * 2) target -= 0.8;
+    // Steering: a preferred heading that wanders through every direction…
+    let target = noise(t * WANDER, j.seed) * TAU * 2;
+    // …turning back towards the middle near any edge, so none leave the screen…
+    const edge = Math.min(j.r * 2.5, width * 0.2, height * 0.2);
+    const pull = clamp(
+      Math.max(
+        (edge - j.x) / edge,
+        (j.x - (width - edge)) / edge,
+        (edge - j.y) / edge,
+        (j.y - (height - edge)) / edge
+      ),
+      0,
+      1
+    );
+    if (pull > 0) {
+      const home = Math.atan2(width / 2 - j.x, j.y - height / 2);
+      target += angleDiff(target, home) * pull;
+    }
     // …and away from the cursor, pulsing faster when it gets close.
     if (pointer.active) {
       const dx = j.x - pointer.x;
@@ -200,27 +213,10 @@ export class Sea {
     wind(j.x, j.y, t, flow);
     j.x += (j.vx + flow.x * CURRENT) * dt;
     j.y += (j.vy + flow.y * CURRENT) * dt;
-    const ox = j.x;
-    const oy = j.y;
 
-    // Leave through the top, come back from below (and side to side).
-    const m = j.r * 5; // room for the tentacles
-    if (j.y < -m) j.y = height + m;
-    else if (j.y > height + m) j.y = -m;
-    if (j.x < -m) j.x = width + m;
-    else if (j.x > width + m) j.x = -m;
-    const jumpX = j.x - ox;
-    const jumpY = j.y - oy;
-    if (jumpX || jumpY) {
-      for (const s of j.strands) {
-        for (let k = 0; k < s.pts.length; k += 2) {
-          s.pts[k] += jumpX;
-          s.prev[k] += jumpX;
-          s.pts[k + 1] += jumpY;
-          s.prev[k + 1] += jumpY;
-        }
-      }
-    }
+    // If a gust or the current carries one off screen, ease it back in.
+    j.vx += (clamp(j.x, 0, width) - j.x) * 2 * dt;
+    j.vy += (clamp(j.y, 0, height) - j.y) * 2 * dt;
   }
 
   /* Verlet strands: inertia, gravity, a travelling sway, length constraints. */
