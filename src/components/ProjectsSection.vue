@@ -13,6 +13,13 @@ const items = [
     link: "https://github.com/cpurev/cstack",
   },
   {
+    name: "linkedin-for-agent",
+    description:
+      "MCP server that finds LinkedIn jobs and tells an agent which ATS each apply link leads to",
+    languages: ["TypeScript", "MCP", "Playwright", "Lightpanda"],
+    link: "https://github.com/cpurev/linkedin-for-agent",
+  },
+  {
     name: "go-ocr",
     description: "Receipt images to structured JSON via Tesseract OCR",
     languages: ["Go", "Tesseract", "MongoDB", "WhatsApp API"],

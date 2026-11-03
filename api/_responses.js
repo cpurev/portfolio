@@ -30,6 +30,7 @@ const PROJECTS = {
   "our-winter-world":
     "Our Winter World is a WordPress plugin for snow educational activities, built with React and PHP: http://ourwinterworld.org/",
   cstack: `cstack is my Claude Code plugin: seven small skills that point the model at the right angle instead of giving it a long checklist. One model, no subagents, a few KB each. ${GITHUB}/cstack`,
+  "linkedin-for-agent": `linkedin-for-agent is an MCP server, in TypeScript, that lets an AI agent search LinkedIn jobs, read the full job descriptions, and resolve each apply link to the ATS behind it (Teamtailor, Workday, Greenhouse, Lever and about 30 others). It never applies itself; the agent does. ${GITHUB}/linkedin-for-agent`,
 };
 
 /* cstack gets its own tools: it's the project visitors are most likely to dig
@@ -111,7 +112,7 @@ export const TOOLS = [
     description:
       "Overview or list of his projects, side projects, things he built.",
     reply:
-      "A few things I've built:\n- cstack: lightweight Claude Code skills that fix the model's angle, not its intelligence\n- go-ocr: receipt photos to structured data\n- go-drive-mcp: an MCP server giving agents scoped access to Google Drive\n- celebsimil: a celebrity lookalike finder that runs in the browser\n- UA Scholars: scholarship submissions for the University of Alaska\n- Phase One Club and MASN: company websites\n- Fletnix and Our Winter World\n- This site\nAsk about any of them for more.",
+      "A few things I've built:\n- cstack: lightweight Claude Code skills that fix the model's angle, not its intelligence\n- linkedin-for-agent: an MCP server that finds LinkedIn jobs and where to apply\n- go-ocr: receipt photos to structured data\n- go-drive-mcp: an MCP server giving agents scoped access to Google Drive\n- celebsimil: a celebrity lookalike finder that runs in the browser\n- UA Scholars: scholarship submissions for the University of Alaska\n- Phase One Club and MASN: company websites\n- Fletnix and Our Winter World\n- This site\nAsk about any of them for more.",
   },
   {
     name: "cstack",
