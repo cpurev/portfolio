@@ -91,7 +91,7 @@ export const TOOLS = [
     description:
       "His tech stack, languages, frameworks, tools, skills, what he is good at technically.",
     reply:
-      "Mostly TypeScript and Python. Frontend: React, Remix, Vue. Backend: FastAPI, Node. Data: PostgreSQL. Cloud: GCP, Azure. I've also worked in C# (.NET) and Go.",
+      "Mostly TypeScript and Python. Frontend: React, Next.js, Remix, Vue. Backend: FastAPI, Django, Node. AI: Google ADK, LangGraph. Data: PostgreSQL. Cloud: GCP, Azure, Terraform, Kubernetes. I've also worked in C# (.NET) and Go.",
   },
   {
     name: "ai_work",
