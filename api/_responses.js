@@ -30,6 +30,7 @@ const PROJECTS = {
   "our-winter-world":
     "Our Winter World: a WordPress plugin for snow education activities. React and PHP. http://ourwinterworld.org/",
   cstack: `cstack: my Claude Code plugin. Seven small skills that give the model the right angle instead of a long checklist. One model, no subagents, a few KB each. ${GITHUB}/cstack`,
+  qlaude: `qlaude: a lightweight Claude Code-style coding agent harness for a local Qwen model (Qwen3.5-9B through Ollama), in TypeScript. Six tools, agents that hand tasks to child agents, a Docker sandbox for unattended runs, and an MCP server so Claude Code can plan while the local agents write the code. ${GITHUB}/qlaude`,
   "linkedin-for-agent": `linkedin-for-agent: a TypeScript MCP server. An AI agent uses it to search LinkedIn jobs, read full descriptions, and resolve each apply link to the ATS behind it (Teamtailor, Workday, Greenhouse, Lever and about 30 others). It never applies; the agent does. ${GITHUB}/linkedin-for-agent`,
 };
 
@@ -112,7 +113,7 @@ export const TOOLS = [
     description:
       "Overview or list of his projects, side projects, things he built.",
     reply:
-      "- cstack: lightweight Claude Code skills that fix the model's angle, not its intelligence\n- linkedin-for-agent: an MCP server that finds LinkedIn jobs and where to apply\n- go-ocr: receipt photos to structured data\n- go-drive-mcp: an MCP server giving agents scoped access to Google Drive\n- celebsimil: a celebrity lookalike finder that runs in the browser\n- UA Scholars: scholarship submissions for the University of Alaska\n- Phase One Club and MASN: company websites\n- Fletnix and Our Winter World\n- This site\nAsk about any of them.",
+      "- qlaude: a lightweight Claude Code-style agent harness for a local Qwen model\n- cstack: lightweight Claude Code skills that fix the model's angle, not its intelligence\n- linkedin-for-agent: an MCP server that finds LinkedIn jobs and where to apply\n- go-ocr: receipt photos to structured data\n- go-drive-mcp: an MCP server giving agents scoped access to Google Drive\n- celebsimil: a celebrity lookalike finder that runs in the browser\n- UA Scholars: scholarship submissions for the University of Alaska\n- Phase One Club and MASN: company websites\n- Fletnix and Our Winter World\n- This site\nAsk about any of them.",
   },
   {
     name: "cstack",

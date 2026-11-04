@@ -6,6 +6,13 @@ import TagRow from "./TagRow.vue";
 
 const items = [
   {
+    name: "qlaude",
+    description:
+      "Lightweight Claude Code-style agent harness for a local Qwen model, with sandboxed agent trees",
+    languages: ["TypeScript", "Ollama", "Docker", "MCP"],
+    link: "https://github.com/cpurev/qlaude",
+  },
+  {
     name: "cstack",
     description:
       "Claude Code plugin: seven lightweight skills that fix the model's angle, not its intelligence",
