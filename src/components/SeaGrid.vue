@@ -40,6 +40,7 @@ onBeforeUnmount(() => {
 
 <template>
   <canvas ref="canvas" class="sea-grid" aria-hidden="true"></canvas>
+  <div class="vignette" aria-hidden="true"></div>
 </template>
 
 <style scoped>
@@ -51,5 +52,18 @@ onBeforeUnmount(() => {
   height: 100%;
   background: #ffffff;
   font-family: var(--font-mono);
+}
+
+/* Darkens toward the edges so the bright sea settles around the chat. */
+.vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 75% 70% at 50% 50%,
+    rgba(0, 0, 0, 0) 40%,
+    rgba(0, 0, 0, 0.07) 70%,
+    rgba(0, 0, 0, 0.29) 100%
+  );
 }
 </style>

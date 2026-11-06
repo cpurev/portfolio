@@ -155,6 +155,7 @@ const onKeydown = (event) => {
         v-model="draft"
         class="input"
         rows="2"
+        enterkeyhint="send"
         placeholder="Ask me anything…"
         aria-label="Ask about me"
         @input="grow"
@@ -197,7 +198,9 @@ const onKeydown = (event) => {
   --c-ink: #121212;
   --c-dim: #6b6b6b;
   --c-line: rgba(18, 18, 18, 0.1);
-  --c-card: rgba(255, 255, 255, 0.94);
+  --c-card: rgba(240, 240, 236, 0.62);
+  --c-card-hover: rgba(248, 248, 245, 0.85);
+  --blur: blur(18px) saturate(0.9);
 
   color-scheme: light;
   position: fixed;
@@ -289,6 +292,8 @@ const onKeydown = (event) => {
 .bubble.assistant {
   align-self: flex-start;
   background: var(--c-card);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
   color: var(--c-ink);
   border: 1px solid var(--c-line);
 }
@@ -345,6 +350,8 @@ const onKeydown = (event) => {
   flex: none;
   width: min(680px, 100%);
   background: var(--c-card);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
   border: 1px solid var(--c-line);
   padding: 0.9rem 0.9rem 0.7rem 1.1rem;
   transition: border-color var(--dur) var(--ease);
@@ -427,6 +434,8 @@ const onKeydown = (event) => {
   font-size: var(--fs-xs);
   color: var(--c-ink);
   background: var(--c-card);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
   border: 1px solid var(--c-line);
   padding: 0.45rem 0.85rem;
   cursor: pointer;
@@ -436,7 +445,7 @@ const onKeydown = (event) => {
 
 @media (hover: hover) {
   .chip:hover:not(:disabled) {
-    background: #fff;
+    background: var(--c-card-hover);
     border-color: rgba(18, 18, 18, 0.22);
   }
 }
