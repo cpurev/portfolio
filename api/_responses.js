@@ -5,7 +5,7 @@
    prefixed, so Vercel doesn't expose this file as a route. */
 
 const EMAIL = "puluunbat@gmail.com";
-const LINKEDIN = "https://www.linkedin.com/in/chuluunbat-purev/";
+const LINKEDIN = "https://www.linkedin.com/in/cpurev/";
 const GITHUB = "https://github.com/cpurev";
 
 export const CANNOT_HELP = `I only answer questions about my work, skills, projects and how to reach me. For anything else, email me at ${EMAIL}.`;

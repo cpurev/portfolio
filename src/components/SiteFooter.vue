@@ -6,7 +6,7 @@ const year = new Date().getFullYear();
 const links = [
   {
     label: "LinkedIn",
-    href: "https://www.linkedin.com/in/chuluunbat-purev/",
+    href: "https://www.linkedin.com/in/cpurev/",
   },
   { label: "GitHub", href: "https://github.com/cpurev" },
   { label: "Text version", href: "#profile", internal: true },

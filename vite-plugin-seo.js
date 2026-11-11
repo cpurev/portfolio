@@ -32,7 +32,7 @@ const PROFILE = {
   familyName: "Purev",
   alternateName: "Purev",
   email: "puluunbat@gmail.com",
-  linkedin: "https://www.linkedin.com/in/chuluunbat-purev/",
+  linkedin: "https://www.linkedin.com/in/cpurev/",
   github: "https://github.com/cpurev",
   roles: ["Software Engineer", "AI Engineer", "Full-Stack Developer"],
   summary:
