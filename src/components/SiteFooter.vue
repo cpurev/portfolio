@@ -9,6 +9,7 @@ const links = [
     href: "https://www.linkedin.com/in/chuluunbat-purev/",
   },
   { label: "GitHub", href: "https://github.com/cpurev" },
+  { label: "Text version", href: "#profile", internal: true },
 ];
 </script>
 
@@ -19,9 +20,14 @@ const links = [
       <span class="dot" :class="{ lead: i === 0 }" aria-hidden="true"
         >&middot;</span
       >
-      <a :href="link.href" target="_blank" rel="noreferrer" class="link">
+      <a
+        :href="link.href"
+        :target="link.internal ? null : '_blank'"
+        :rel="link.internal ? null : 'noreferrer'"
+        class="link"
+      >
         {{ link.label }}
-        <IconExternal />
+        <IconExternal v-if="!link.internal" />
       </a>
     </template>
   </footer>

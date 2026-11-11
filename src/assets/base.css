@@ -172,6 +172,57 @@ ul {
   border: 0;
 }
 
+/* The crawlable profile (index.html #profile), opened from the footer */
+#profile:target {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 2rem max(var(--pad-x), calc((100% - var(--container)) / 2));
+  overflow: auto;
+  clip: auto;
+  white-space: normal;
+  background: #fafafa;
+  color: #121212;
+  font-family: var(--font-mono);
+  line-height: var(--lh-body);
+}
+#profile:target h1 {
+  font-size: var(--fs-h1);
+  line-height: var(--lh-tight);
+  margin-bottom: 1.5rem;
+}
+#profile:target h2 {
+  font-size: var(--fs-lg);
+  color: #b4532f;
+  margin: 2rem 0 0.75rem;
+}
+#profile:target h3 {
+  font-size: var(--fs-base);
+  margin: 1.25rem 0 0.25rem;
+}
+#profile:target p,
+#profile:target li {
+  font-size: var(--fs-sm);
+  max-width: 70ch;
+}
+#profile:target ul {
+  padding-left: 1.25rem;
+}
+#profile:target a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+#profile:target .profile__close {
+  float: right;
+}
+#profile:not(:target) .profile__close {
+  display: none;
+}
+
 /* Terminal caret — steady block by default, blinks when motion is allowed */
 .cursor {
   display: inline-block;
